@@ -6,9 +6,11 @@
 const express = require("express");
 // const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require("path");
 
 //routes
 const sauceRoutes = require("./routes/sauce");
+const userRoutes = require('./routes/user');
 
 
 
@@ -53,8 +55,12 @@ app.use(express.json());
     Router           
 --------------- */
 
+//Indique à Express de gérer les ressources de type images de manière static avec __dirname à chaque fois qu'elle reçoit un requête vers la route /images
+app.use('/images/', express.static(path.join(__dirname, 'images')));
+
 //Configuration du router
 app.use("/api/sauces", sauceRoutes);
+app.use('/api/auth', userRoutes);
 
 
 
