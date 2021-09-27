@@ -21,6 +21,7 @@ const sauceCtrl = require('../controllers/sauce');
 
 /* /!\ Placer multer après auth car sinon même les img de requêtes non authentifiées seront enregistrer dans le serveur */
 router.post("/", auth, multer, sauceCtrl.createSauce);
+router.post("/:id/like", auth, sauceCtrl.likeSauce);
 
 router.put("/:id", auth, multer, sauceCtrl.modifySauce);
 

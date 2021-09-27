@@ -4,6 +4,7 @@
 
 //node_modules
 const express = require("express");
+const helmet = require("helmet");
 // const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -33,6 +34,8 @@ const app = express();
 /* ------------
     Middlewares           
 --------------- */
+//Helmet (Empêche l'accès à nos cookie)
+app.use(helmet());
 
 //Paramètres des headers
 app.use((req, res, next) => {
