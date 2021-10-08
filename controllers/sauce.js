@@ -120,43 +120,6 @@ exports.getAllSauces = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-//getAllSauces - Version dur
-// exports.getAllSaucesTest = (req, res, next) => {
-//     const sauce = [
-//         {
-//             "usersLiked": [],
-//             "usersDisliked": [],
-//             "_id": "613de0f79534088318e86097",
-//             "name": "Sauce1",
-//             "manufacturer": "Manu1",
-//             "description": "desc",
-//             "mainPepper": "tabasco",
-//             "heat": 4,
-//             "userId": "613b25ca57ae6e3c4ca4056f",
-//             "imageUrl": "http://localhost:3000/images/tabasco.jpg1631445239488.jpg",
-//             "likes": 0,
-//             "dislikes": 0,
-//             "__v": 0
-//         },
-//         {
-//             "usersLiked": [],
-//             "usersDisliked": [],
-//             "_id": "613de0f79534088318e86097",
-//             "name": "Sauce2Test",
-//             "manufacturer": "Manu2Test",
-//             "description": "descTest",
-//             "mainPepper": "tabascoTest2",
-//             "heat": 2,
-//             "userId": "613b25ca57ae6e3c4ca4056f",
-//             "imageUrl": "http://localhost:3000/images/tabasco.jpg1631445239488.jpg",
-//             "likes": 0,
-//             "dislikes": 0,
-//             "__v": 0
-//         }
-//     ];
-//     res.status(200).json(sauce);
-// };
-
 exports.likeSauce = (req, res, next) => {
     console.log("------------------------------");
 

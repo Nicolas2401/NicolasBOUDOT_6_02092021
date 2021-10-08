@@ -18,6 +18,8 @@ const userCtrl = require('../controllers/user');
 router.post("/signup", userCtrl.signUp);
 router.post("/login", userCtrl.logIn);
 
+//Ajout de la possibilité de supprimer son profil
+router.delete("/profils/:id", userCtrl.deleteProfil);
 
 
 /* ------------

@@ -31,9 +31,6 @@ router.delete("/:id", auth, sauceCtrl.deleteSauce);
 router.get("/:id", auth, sauceCtrl.getOneSauce);
 router.get("/", auth, sauceCtrl.getAllSauces);
 
-//All - Version dur
-// router.get("/", auth, sauceCtrl.getAllSaucesTest);
-
 
 
 /* ---------
