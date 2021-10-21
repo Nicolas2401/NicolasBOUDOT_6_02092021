@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema({
     password: { type: String, required: true }
 });
 
-//Vérification que l'email n'est jamais été inscrit
+//Vérification que l'email n'est pas déjà utilisé
 userSchema.plugin(uniqueValidator);
 
 

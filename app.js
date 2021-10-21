@@ -9,6 +9,9 @@ const helmet = require("helmet");
 const mongoose = require("mongoose");
 const path = require("path");
 
+//Variables d'environnement pour masqué des données sensibles (ID, MDP, TOKEN, etc.)
+require("dotenv").config();
+
 //routes
 const sauceRoutes = require("./routes/sauce");
 const userRoutes = require('./routes/user');
@@ -20,7 +23,7 @@ const userRoutes = require('./routes/user');
 --------------- */
 
 //Connection avec MongoDB grâce à Mongoose
-mongoose.connect('mongodb+srv://nicolas:123@clusterhottakes.noxyx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect(process.env.DB_URL,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

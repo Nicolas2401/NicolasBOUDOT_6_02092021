@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
         //Récupère la deuxième partie de l'authentification (Bearer xxx)
         const token = req.headers.authorization.split(' ')[1];
         //Décode le token grâce à la clé secret de logIn()
-        const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+        const decodedToken = jwt.verify(token, process.env.TOKEN);
         //Extraction de l'id du token, mis depuis logIn()
         const userId = decodedToken.userId;
 

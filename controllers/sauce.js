@@ -121,27 +121,42 @@ exports.getAllSauces = (req, res, next) => {
 };
 
 exports.likeSauce = (req, res, next) => {
-    console.log("------------------------------");
-
-    console.log("req.body :", req.body);
-
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
             const sauceObject = {};
 
-            console.log("sauce BEFORE", sauce);
-
-            //Si on like
+            //Si la requete est un like
             if (req.body.like == 1) {
+                //On regarde si l'utilisateur ne like pas déjà la sauce
+                sauce.usersLiked.forEach(user => {
+                    if (user == req.body.userId) {
+                        //Error
+                        throw "Vous likez déjà cette sauce";
+                    }
+                });
+
+                //On regarde également si l'utilisateur ne dislike pas la sauce
+                sauce.usersDisliked.forEach(user => {
+                    if (user == req.body.userId) {
+                        //Error
+                        throw "Vous dislikez cette sauce, vous ne pouvez pas la liker";
+                    }
+                });
+                
                 //On ajoute (en 2 temps, sinon = .length) l'id de l'utilisateur qui like
                 sauce.usersLiked.push(req.body.userId);
 
                 //On attribut à l'objet les nouvelles infos
                 sauceObject.usersLiked = sauce.usersLiked;
                 sauceObject.likes = sauce.usersLiked.length;
-            }
 
-            //Sinon, si on retire le like
+                //Récupère le produit par son /:id et le remplace par le nouveau en vérifiant qu'il s'agisse bien de ce même id
+                Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+                    .then(() => res.status(200).json({message: "Like ajouté !"}))
+                    .catch(error => res.status(400).json({ error }));
+            } 
+
+            // Sinon, si on retire le like
             else if (req.body.like == 0) {
                 //On enlève (en 2 temps) l'id des Likes ou des Dislikes
                 const newUsersLiked = sauce.usersLiked.filter(id => id !== req.body.userId);
@@ -152,24 +167,43 @@ exports.likeSauce = (req, res, next) => {
                 sauceObject.usersDisliked = newUsersDisliked;
                 sauceObject.likes = newUsersLiked.length;
                 sauceObject.dislikes = newUsersDisliked.length;
+
+                //Récupère le produit par son /:id et le remplace par le nouveau en vérifiant qu'il s'agisse bien de ce même id
+                Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+                    .then(() => res.status(200).json({message: "Retrait du like ou du dislike !"}))
+                    .catch(error => res.status(400).json({ error }));
             }
 
             //Sinon, si on dislike
             else if (req.body.like == -1) {
+                //On regarde si l'utilisateur ne dislike pas déjà la sauce
+                sauce.usersDisliked.forEach(user => {
+                    if (user == req.body.userId) {
+                        //Error
+                        throw "Vous dislikez déjà cette sauce";
+                    }
+                });
+
+                //On regarde également si l'utilisateur ne like pas la sauce
+                sauce.usersLiked.forEach(user => {
+                    if (user == req.body.userId) {
+                        //Error
+                        throw "Vous likez cette sauce, vous ne pouvez pas la disliker";
+                    }
+                });
+
                 //On ajoute (en 2 temps, sinon = .length) l'id de l'utilisateur qui dislike
                 sauce.usersDisliked.push(req.body.userId);
 
                 //On attribut à l'objet les nouvelles infos
                 sauceObject.usersDisliked = sauce.usersDisliked;
                 sauceObject.dislikes = sauce.usersDisliked.length;
+
+                //Récupère le produit par son /:id et le remplace par le nouveau en vérifiant qu'il s'agisse bien de ce même id
+                Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+                    .then(() => res.status(200).json({message: "Dislike ajouté !"}))
+                    .catch(error => res.status(400).json({ error }));
             }
-
-            console.log("sauceObject :", sauceObject);
-
-            // Récupère le produit par son /:id et le remplace par le nouveau en vérifiant qu'il s'agisse bien de ce même id
-            Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-                .then(() => res.status(200).json({message: "Objet modifié !"}))
-                .catch(error => res.status(400).json({ error }));
         })
         .catch( error => res.status(500).json({ error }));
 };

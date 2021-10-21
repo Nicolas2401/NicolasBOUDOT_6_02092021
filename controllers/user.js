@@ -16,11 +16,11 @@ const User = require("../models/user");
     Controllers      
 --------------- */
 
-//Création et export de la fonction
+//Chiffre l'email et Hash le mdp
 exports.signUp = (req, res, next) => {
     //Encrypte l'email selon une clé et une IV (Initialization Vector : bloc de bits combiné avec le premier bloc de données)
-    var key = CryptoJS.enc.Hex.parse("000102030405060708090a0b0c0d0e0f");
-    var iv = CryptoJS.enc.Hex.parse("101112131415161718191a1b1c1d1e1f");
+    var key = CryptoJS.enc.Hex.parse(process.env.KEY);
+    var iv = CryptoJS.enc.Hex.parse(process.env.IV);
 
     var emailCrypted = CryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
     //Si besoin de décryptage
@@ -48,8 +48,8 @@ exports.logIn = (req, res, next) => {
     console.log(req.body);
 
     //Encrypte l'email selon une clé et une IV (Initialization Vector : bloc de bits combiné avec le premier bloc de données)
-    var key = CryptoJS.enc.Hex.parse("000102030405060708090a0b0c0d0e0f");
-    var iv = CryptoJS.enc.Hex.parse("101112131415161718191a1b1c1d1e1f");
+    var key = CryptoJS.enc.Hex.parse(process.env.KEY);
+    var iv = CryptoJS.enc.Hex.parse(process.env.IV);
 
     var emailCrypted = CryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
     //Si besoin de décryptage
@@ -79,10 +79,9 @@ exports.logIn = (req, res, next) => {
                             //Le token contient l'Id de l'utilisateur
                             { userId: user._id },
                             //Encode le token selon la chaîne de caractère suivante (à complexifier en prod)
-                            'RANDOM_TOKEN_SECRET',
+                            process.env.TOKEN,
                             //Validiter du token. Après ce délai, il faudra se reconnecter
                             { expiresIn: '24h'}
-                            // { expiresIn: 10}
                         )
                     });
                 })
